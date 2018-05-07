@@ -36,8 +36,6 @@ public class Boss extends Rectangle{
 		x += step ;
 	}
 	
-	public void 
-	
 	public void moveUP(){
 		y -= step;
 	}
