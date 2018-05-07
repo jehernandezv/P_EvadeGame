@@ -1,11 +1,9 @@
 package models;
 
 import java.awt.Rectangle;
-
-
 public class Boss extends Rectangle{
 	private static final long serialVersionUID = 1L;
-	private int step = 5;
+	private int step = 2;
 	
 	public Boss(int x,int y,int size) {
 		super(x,y,size,size);
@@ -37,6 +35,8 @@ public class Boss extends Rectangle{
 	public void moveRigth(){
 		x += step ;
 	}
+	
+	public void 
 	
 	public void moveUP(){
 		y -= step;

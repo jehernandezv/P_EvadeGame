@@ -2,8 +2,8 @@ package models;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-
 import javax.swing.Timer;
 
 public class Game{
@@ -13,14 +13,12 @@ public class Game{
 	private Timer timerCronometer;
 	private Timer bullet;
 	private String cronometer;
+	private LocalDateTime cronometerGame;
 	
 	public Game(GroupBoss groupBoss, Hero hero) {
 		this.groupBoss = groupBoss;
 		this.hero = hero;
-		moveFigures = new MyThread(50,groupBoss.getBosses(),hero);
-		moveFigures.start();
-		cromometer();
-		initBullet();
+		moveFigures = new MyThread(30,groupBoss.getBosses(),hero);
 	}
 	
 	public void stop(){
@@ -28,11 +26,19 @@ public class Game{
 		moveFigures.stop();
 	}
 	
+	public void initGame(){
+		moveFigures.start();
+		cromometer();
+		initBullet();
+	}
+	
+	
+	
 	public void cromometer(){
 		timerCronometer = new Timer(1000, new ActionListener() {
-			byte second = 0;
-			byte minute = 0;
-			byte hour = 0;
+			byte second = (byte) ((cronometerGame != null)? cronometerGame.getSecond():0);
+			byte minute = (byte) ((cronometerGame != null)? cronometerGame.getMinute():0);
+			byte hour = (byte) ((cronometerGame != null)? cronometerGame.getHour():0);
 			public void actionPerformed(ActionEvent e) {
 				second ++;
 				if(second == 60){
@@ -45,12 +51,13 @@ public class Game{
 				}
 				cronometer = "Hour : " + hour + " Minutes : " + minute + " Second : " + second;
 			}
+		
 		});
 		timerCronometer.start();
 	}
 	
 	public void initBullet(){
-		this.bullet = new Timer(50, new ActionListener() {
+		this.bullet = new Timer(10, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(hero.getGroupBullet().getListBullets().size() != 0){
 					for (int i = 0; i < hero.getGroupBullet().getListBullets().size(); i++) {
@@ -90,6 +97,14 @@ public class Game{
 
 	public MyThread getMoveFigures() {
 		return moveFigures;
+	}
+
+	public LocalDateTime getCronometerGame() {
+		return cronometerGame;
+	}
+
+	public void setCronometerGame(LocalDateTime cronometerGame) {
+		this.cronometerGame = cronometerGame;
 	}
 	
 }

@@ -6,10 +6,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
+import persistence.SaveGameXML;
 import utility.Utility;
 import view.JFMainWindow;
 import models.Bullet;
@@ -17,14 +19,16 @@ import models.Game;
 import models.GroupBoss;
 import models.Hero;
 
-public class Controller implements KeyListener, MouseListener{
+public class Controller implements KeyListener, MouseListener,MouseMotionListener,ActionListener{
 	private Game game;
 	private JFMainWindow jfMainWindow;
-	private Timer timerRefresh;
+	private Timer timerRefresh,timerAutoSave;
 	
 	public Controller() {
-		game = new Game(new GroupBoss(3),(new Hero(40, 60,50)));
+		game = new Game(new GroupBoss(2),(new Hero(40, 60,50)));
 		jfMainWindow = new JFMainWindow(game.getListBoss(),game.getHero(),this,game.getHero().getGroupBullet().getListBullets());
+		game.initGame();
+		this.autoSave(game);
 		this.refreshJFMainWindow();
 	}
 	
@@ -32,6 +36,16 @@ public class Controller implements KeyListener, MouseListener{
 		JOptionPane.showMessageDialog(null, "Ha Perdido, Su Tiempo de juego fue de " + game.getCronometer());
 		timerRefresh.stop();
 		game.stop();
+	}
+	
+	public void autoSave(Game game){
+		timerAutoSave = new Timer(5000, new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SaveGameXML.SaveXmlGroup(game);
+				System.out.println("guardo");
+			}
+		});
+		timerAutoSave.start();
 	}
 	
 	public void keyTyped(KeyEvent e) {
@@ -56,13 +70,12 @@ public class Controller implements KeyListener, MouseListener{
 		
 	}
 
-	@Override
 	public void keyReleased(KeyEvent e) {
 		
 	}
 	
 	public void refreshJFMainWindow(){
-		timerRefresh = new Timer(50, new ActionListener(){
+		timerRefresh = new Timer(5, new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				jfMainWindow.setTimeJLabel(game.getCronometer());
 				if(game.getMoveFigures().isStop()){
@@ -73,11 +86,10 @@ public class Controller implements KeyListener, MouseListener{
 		});
 		timerRefresh.start();
 	}
-
+	
 	public void mouseClicked(MouseEvent e) {
-		System.out.println("x " + e.getX() + "y " + e.getY());
-		game.getHero().getGroupBullet().getListBullets().add(new Bullet(Utility.atPolares(e.getX(), e.getY()), (short) 10, game.getHero().x,game.getHero().y));
-		System.out.println(game.getHero().getGroupBullet().getListBullets().size());
+		System.out.println("Grados: " + ( 360 - Utility.atPolar(e.getX(), e.getY())));
+		game.getHero().getGroupBullet().getListBullets().add(new Bullet(0, (short) 10, game.getHero().x,game.getHero().y));
 	}
 
 	public void mousePressed(MouseEvent e) {
@@ -93,6 +105,25 @@ public class Controller implements KeyListener, MouseListener{
 
 	public void mouseExited(MouseEvent e) {
 		
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		
+	}
+
+	public void mouseMoved(MouseEvent e) {
+		System.out.println("X: " + (e.getX()- game.getHero().x) + " Y: " +  (e.getY() - game.getHero().y));
+	}
+
+	
+	
+	public void actionPerformed(ActionEvent e) {
+		switch (EAction.valueOf(e.getActionCommand())) {
+		case EXITGAME:
+			SaveGameXML.SaveXmlGroup(game);
+			break;
+		}
 	}
 
 }

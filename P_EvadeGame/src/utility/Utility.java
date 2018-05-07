@@ -10,7 +10,26 @@ public class Utility {
 		return Math.pow((x - h) / xRadius, 2) + Math.pow((y - k) / yRadius, 2) <= 1;
 	}
 	
-	public static double atPolares(int x, int y){
-		return Math.atan((y/x));
+	public static double atPolar(double x, double y){
+		double grade = 0;
+		if(x > 0 && y > 0){
+			y = y * -1;
+			grade = Math.atan(y/ x);
+		}else
+		if(x > 0 && y < 0){
+			y = y * -1;
+			grade = Math.atan(y/ x);
+		}
+		
+//		if(x < 0 && y > 0){
+//			y = y * -1;
+//			grade = Math.atan(y/ x);
+//		}
+//		
+//		if(x < 0 && y < 0){
+//			y = y *-1;
+//			grade = Math.atan(y/ x);
+//		}
+		return Math.toDegrees(grade);
 	}
 }

@@ -11,6 +11,10 @@ public class GroupBoss {
 		generateBoss(cant);
 	}
 	
+	public GroupBoss(){
+		bosses = new ArrayList<Boss>();
+	}
+	
 	public void generateBoss(int cant){
 		Random random = new Random();
 		for (int i = 0; i < cant; i++) {

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
+import controller.Controller;
 import models.Boss;
 import models.Bullet;
 import models.Hero;
@@ -16,8 +17,10 @@ public class JPGameZone extends JPanel{
 	private ArrayList<Boss> bosses;
 	private ArrayList<Bullet> listBullets;
 	
-	
-	public JPGameZone(ArrayList<Boss> boss,Hero player,ArrayList<Bullet> listBullet) {
+	public JPGameZone(ArrayList<Boss> boss,Hero player,ArrayList<Bullet> listBullet,Controller controller) {
+		this.addMouseMotionListener(controller);
+		this.addMouseListener(controller);
+		this.setFocusable(true);
 		this.player = player;
 		this.bosses = boss;
 		this.listBullets = listBullet;

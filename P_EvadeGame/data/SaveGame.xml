@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Game>
+  <groupBoss>
+    <dataBoss>
+      <posBossX>169</posBossX>
+      <posBossY>182</posBossY>
+      <sizeBoss>50</sizeBoss>
+    </dataBoss>
+    <dataBoss>
+      <posBossX>162</posBossX>
+      <posBossY>181</posBossY>
+      <sizeBoss>50</sizeBoss>
+    </dataBoss>
+  </groupBoss>
+  <hero>
+    <posHeroY>375</posHeroY>
+    <posHeroX>125</posHeroX>
+    <sizeHero>50</sizeHero>
+  </hero>
+  <timeGame>Hour : 0 Minutes : 0 Second : 14</timeGame>
+  <groupBullet />
+</Game>

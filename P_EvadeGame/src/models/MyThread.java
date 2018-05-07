@@ -25,8 +25,8 @@ public class MyThread implements Runnable{
 			try {
 				for (int index = 0; index < getListBoss().size(); index++) {
 					getListBoss().get(index).chase(hero.x, hero.y);
-					if(getListBoss().get(index).isColision(hero.x, hero.y)){
-						this.stop();
+					if(getListBoss().get(index).intersects(this.hero)){
+						//this.stop();
 					}
 				}	
 				Thread.sleep(sleep);

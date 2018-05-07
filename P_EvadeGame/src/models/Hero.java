@@ -32,6 +32,12 @@ public class Hero extends Rectangle{
 
 	public GroupBullet getGroupBullet() {
 		return groupBullet;
+	}
+
+	public void setGroupBullet(GroupBullet groupBullet) {
+		this.groupBullet = groupBullet;
 	}	
+	
+	
 
 }

@@ -14,8 +14,8 @@ public class Bullet extends Rectangle{
 	
 	public void move(int step) throws InterruptedException {
 		double x = this.x, y = this.y;
-		this.x = ((int) (x + step * Math.cos(getRadians())));
-		this.y = ((int) (y + step * Math.sin(getRadians())));
+		this.x = ((int) (x + step * Math.cos(this.getRadians())));
+		this.y = ((int) (y + step * Math.sin(this.getRadians())));
 	}
 	
 	public double getRadians() {
