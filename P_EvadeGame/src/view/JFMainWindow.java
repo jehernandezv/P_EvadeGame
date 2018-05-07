@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -19,9 +20,9 @@ public class JFMainWindow extends JFrame{
 	private JPButtonsNort jpButtonsNort;
 	private ImageIcon icon = new ImageIcon(getClass().getResource("/icon.jpg"));
 	
-	public JFMainWindow(ArrayList<Boss> boss,Hero player,Controller controller,ArrayList<Bullet> listBullets) {
+	public JFMainWindow(ArrayList<Boss> boss,Hero player,Controller controller,ArrayList<Bullet> listBullets,Rectangle areaGame) {
 		this.setTitle(NAME_APP);
-		this.setSize(800, 600);
+		this.setSize(areaGame.height, areaGame.width);
 		this.setIconImage(icon.getImage());
 		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);

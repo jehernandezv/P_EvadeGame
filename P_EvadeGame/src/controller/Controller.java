@@ -1,5 +1,6 @@
 package controller;
 
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -7,10 +8,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
-
 import persistence.SaveGameXML;
 import utility.Utility;
 import view.JFMainWindow;
@@ -25,8 +24,8 @@ public class Controller implements KeyListener, MouseListener,MouseMotionListene
 	private Timer timerRefresh,timerAutoSave;
 	
 	public Controller() {
-		game = new Game(new GroupBoss(2),(new Hero(40, 60,50)));
-		jfMainWindow = new JFMainWindow(game.getListBoss(),game.getHero(),this,game.getHero().getGroupBullet().getListBullets());
+		game = new Game(new GroupBoss(2),(new Hero(40, 60,50)),new Rectangle(800,600));
+		jfMainWindow = new JFMainWindow(game.getListBoss(),game.getHero(),this,game.getHero().getGroupBullet().getListBullets(),game.getAreaGame());
 		game.initGame();
 		this.autoSave(game);
 		this.refreshJFMainWindow();

@@ -1,5 +1,6 @@
 package persistence;
 
+import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -32,6 +33,14 @@ public class SaveGameXML {
 		doc.setRootElement(theRoot);
 		Element groupBoss = new Element("groupBoss");
 		Element groupBullet = new Element("groupBullet");
+		Element sizeGame = new Element("sizeGame");
+		//Tamaño de la pantalla
+		Element heightGame = new Element("heigthGame");
+		Element widthGame = new Element("widthGame");
+		heightGame.addContent(String.valueOf(game.getAreaGame().getHeight()));
+		widthGame.addContent(String.valueOf(game.getAreaGame().getWidth()));
+		sizeGame.addContent(widthGame);
+		sizeGame.addContent(heightGame);
 		//Datos del heroe
 		Element hero = new Element("hero");
 		Element posHeroX = new Element("posHeroX");
@@ -97,6 +106,7 @@ public class SaveGameXML {
 		theRoot.addContent(hero);
 		theRoot.addContent(timeGame);
 		theRoot.addContent(groupBullet);
+		theRoot.addContent(sizeGame);
 		
 		XMLOutputter xmlOutput = new XMLOutputter(Format.getPrettyFormat());
 		xmlOutput.output(doc, fileOutputStream);
@@ -139,7 +149,7 @@ public class SaveGameXML {
 		int posHeroX = Integer.parseInt(root.getChildren("hero").get(0).getChildText("posHeroX"));
 		int posHeroY = Integer.parseInt(root.getChildren("hero").get(0).getChildText("posHeroY"));
 		int sizeHero = Integer.parseInt(root.getChildren("hero").get(0).getChildText("sizeHero"));
-		game = new Game(groupBoss, new Hero(posHeroX, posHeroY, sizeHero));
+		game = new Game(groupBoss, new Hero(posHeroX, posHeroY, sizeHero),null);
 		game.getHero().getGroupBullet().setListBullets(listBullets);
 		String [] values = root.getChildText("timeGame").split(":");
 		byte second = Byte.parseByte(getValue(values[3]));
@@ -147,7 +157,11 @@ public class SaveGameXML {
 		byte hour = Byte.parseByte(getValue(values[1]));
 		LocalDateTime dateTime = LocalDateTime.of(1, 1, 1, hour, minutes, second);
 		game.setCronometerGame(dateTime);
-			
+		//Tamaño del juego
+		double heigth = Double.parseDouble(root.getChildren("sizeGame").get(0).getChildText("heigthGame"));
+		double width = Double.parseDouble(root.getChildren("sizeGame").get(0).getChildText("widthGame"));
+		game.setAreaGame(new Rectangle((int)heigth,(int)width));	
+		
 	} catch (JDOMException | IOException e) {
 		
 	}

@@ -1,9 +1,12 @@
 package models;
 
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Iterator;
+
 import javax.swing.Timer;
 
 public class Game{
@@ -14,10 +17,12 @@ public class Game{
 	private Timer bullet;
 	private String cronometer;
 	private LocalDateTime cronometerGame;
+	private Rectangle areaGame;
 	
-	public Game(GroupBoss groupBoss, Hero hero) {
+	public Game(GroupBoss groupBoss, Hero hero,Rectangle areaGame) {
 		this.groupBoss = groupBoss;
 		this.hero = hero;
+		this.areaGame = areaGame;
 		moveFigures = new MyThread(30,groupBoss.getBosses(),hero);
 	}
 	
@@ -60,9 +65,14 @@ public class Game{
 		this.bullet = new Timer(10, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(hero.getGroupBullet().getListBullets().size() != 0){
-					for (int i = 0; i < hero.getGroupBullet().getListBullets().size(); i++) {
+					for (Iterator<?> it = hero.getGroupBullet().getListBullets().iterator(); it.hasNext();) {
+						Bullet bullet = (Bullet) it.next();
 						try {
-							hero.getGroupBullet().getListBullets().get(i).move(5);
+							if(bullet.x -50 > areaGame.width || bullet.y -50 > areaGame.getHeight()){
+								it.remove();
+							}else{
+								bullet.move(5);
+							}
 						} catch (InterruptedException e1) {
 							e1.printStackTrace();
 						}						
@@ -106,5 +116,15 @@ public class Game{
 	public void setCronometerGame(LocalDateTime cronometerGame) {
 		this.cronometerGame = cronometerGame;
 	}
+
+	public Rectangle getAreaGame() {
+		return areaGame;
+	}
+
+	public void setAreaGame(Rectangle areaGame) {
+		this.areaGame = areaGame;
+	}
+	
+	
 	
 }

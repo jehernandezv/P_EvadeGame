@@ -2,21 +2,25 @@
 <Game>
   <groupBoss>
     <dataBoss>
-      <posBossX>169</posBossX>
-      <posBossY>182</posBossY>
+      <posBossX>336</posBossX>
+      <posBossY>115</posBossY>
       <sizeBoss>50</sizeBoss>
     </dataBoss>
     <dataBoss>
-      <posBossX>162</posBossX>
-      <posBossY>181</posBossY>
+      <posBossX>335</posBossX>
+      <posBossY>118</posBossY>
       <sizeBoss>50</sizeBoss>
     </dataBoss>
   </groupBoss>
   <hero>
-    <posHeroY>375</posHeroY>
-    <posHeroX>125</posHeroX>
+    <posHeroY>90</posHeroY>
+    <posHeroX>515</posHeroX>
     <sizeHero>50</sizeHero>
   </hero>
-  <timeGame>Hour : 0 Minutes : 0 Second : 14</timeGame>
+  <timeGame>Hour : 0 Minutes : 0 Second : 19</timeGame>
   <groupBullet />
+  <sizeGame>
+    <widthGame>800.0</widthGame>
+    <heigthGame>600.0</heigthGame>
+  </sizeGame>
 </Game>
