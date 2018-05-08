@@ -21,7 +21,7 @@ public class JPCronometer extends JPanel{
 
 	private void init() {
 		jLabelTimeSimulation.setForeground(Color.WHITE);
-		jLabelTimeSimulation.setFont(new Font("Arial", Font.BOLD, 50));
+		jLabelTimeSimulation.setFont(new Font("Arial", Font.BOLD, 30));
 
 		this.add(jLabelTimeSimulation);
 		

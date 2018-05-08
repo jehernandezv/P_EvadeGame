@@ -18,17 +18,16 @@ public class JFMainWindow extends JFrame{
 	private static final long serialVersionUID = 1L;
 	private JPCronometer jpCronometer;
 	private JPGameZone jpGameZone;
-	private JPButtonsNort jpButtonsNort;
 	private ImageIcon icon = new ImageIcon(getClass().getResource("/icon.jpg"));
 	
 	public JFMainWindow(ArrayList<Enemy> listEnemys,Hero player,Controller controller,ArrayList<Bullet> listBullets,Rectangle areaGame,Boss boss) {
 		this.setTitle(NAME_APP);
+		this.setResizable(false);
 		this.setSize(areaGame.height, areaGame.width);
 		this.setIconImage(icon.getImage());
 		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		jpCronometer = new JPCronometer();
-		this.jpButtonsNort = new JPButtonsNort(controller);
 		jpGameZone = new JPGameZone(listEnemys,player,listBullets,controller,boss);
 		this.addKeyListener(controller);
 		
@@ -39,7 +38,6 @@ public class JFMainWindow extends JFrame{
 	private void init() {
 		this.add(jpCronometer,BorderLayout.SOUTH);
 		this.add(jpGameZone, BorderLayout.CENTER);
-		this.add(jpButtonsNort, BorderLayout.NORTH);
 	}
 	
 	public void setTimeJLabel(String string){

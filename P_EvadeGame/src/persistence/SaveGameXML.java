@@ -14,6 +14,7 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
+import models.Boss;
 import models.Enemy;
 import models.Bullet;
 import models.Game;
@@ -34,6 +35,23 @@ public class SaveGameXML {
 		Element groupEnemy = new Element("groupBoss");
 		Element groupBullet = new Element("groupBullet");
 		Element sizeGame = new Element("sizeGame");
+		Element boss = new Element("boss");
+		//Datos del boss
+		Element posBossX = new Element("posBossX");
+		Element posBossY = new Element("posBossY");
+		Element sizeBoss = new Element("sizeBoss");
+		Element healthBoss = new Element("healthBoss");
+		
+		posBossX.addContent(String.valueOf(game.getBoss().x));
+		posBossY.addContent(String.valueOf(game.getBoss().y));
+		sizeBoss.addContent(String.valueOf(game.getBoss().height));
+		healthBoss.addContent(String.valueOf(game.getBoss().getHealth()));
+		boss.addContent(posBossX);
+		boss.addContent(posBossY);
+		boss.addContent(sizeBoss);
+		boss.addContent(healthBoss);
+		
+		
 		//Tamaño de la pantalla
 		Element heightGame = new Element("heigthGame");
 		Element widthGame = new Element("widthGame");
@@ -60,17 +78,17 @@ public class SaveGameXML {
 		timeGame.addContent(game.getCronometer());
 		
 		//datos de los enemigos
-		for (Enemy boss: listEnemy) {
+		for (Enemy enemy: listEnemy) {
 			Element dataEnemy = new Element("dataBoss");
 			Element posEnemyX = new Element("posBossX");
 			Element posEnemyY = new Element("posBossY");
 			Element sizeEnemy = new Element("sizeBoss");
 			Element health = new Element("health");
 			
-			posEnemyX.addContent(String.valueOf(boss.x));
-			posEnemyY.addContent(String.valueOf(boss.y));
-			sizeEnemy.addContent(String.valueOf(boss.height));
-			health.addContent(String.valueOf(boss.getHealth()));
+			posEnemyX.addContent(String.valueOf(enemy.x));
+			posEnemyY.addContent(String.valueOf(enemy.y));
+			sizeEnemy.addContent(String.valueOf(enemy.height));
+			health.addContent(String.valueOf(enemy.getHealth()));
 				
 			dataEnemy.addContent(posEnemyX);
 			dataEnemy.addContent(posEnemyY);
@@ -109,6 +127,7 @@ public class SaveGameXML {
 		theRoot.addContent(timeGame);
 		theRoot.addContent(groupBullet);
 		theRoot.addContent(sizeGame);
+		theRoot.addContent(boss);
 		
 		XMLOutputter xmlOutput = new XMLOutputter(Format.getPrettyFormat());
 		xmlOutput.output(doc, fileOutputStream);
@@ -139,6 +158,14 @@ public class SaveGameXML {
 				bosses.add(boss);
 		}
 		groupBoss.setBosses(bosses);
+		//Boss
+		int posBossX = Integer.parseInt(root.getChildren("boss").get(0).getChildText("posBossX"));
+		int posBossY = Integer.parseInt(root.getChildren("boss").get(0).getChildText("posBossY"));
+		int sizeBoss = Integer.parseInt(root.getChildren("boss").get(0).getChildText("sizeBoss"));
+		int healthBoss = Integer.parseInt(root.getChildren("boss").get(0).getChildText("healthBoss"));
+		Boss boss = new Boss(posBossX, posBossY, sizeBoss);
+		boss.setHealth((short) healthBoss);
+		
 		//Disparos
 		ArrayList<Bullet> listBullets = new ArrayList<Bullet>();
 		if(root.getChildren("groupBullet").get(0).cloneContent().size() > 0){
@@ -154,7 +181,7 @@ public class SaveGameXML {
 		int posHeroX = Integer.parseInt(root.getChildren("hero").get(0).getChildText("posHeroX"));
 		int posHeroY = Integer.parseInt(root.getChildren("hero").get(0).getChildText("posHeroY"));
 		int sizeHero = Integer.parseInt(root.getChildren("hero").get(0).getChildText("sizeHero"));
-		game = new Game(groupBoss, new Hero(posHeroX, posHeroY, sizeHero),null,null);
+		game = new Game(groupBoss, new Hero(posHeroX, posHeroY, sizeHero),null,boss);
 		game.getHero().getGroupBullet().setListBullets(listBullets);
 		String [] values = root.getChildText("timeGame").split(":");
 		byte second = Byte.parseByte(getValue(values[3]));

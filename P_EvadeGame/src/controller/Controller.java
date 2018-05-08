@@ -52,7 +52,7 @@ public class Controller implements KeyListener, MouseListener,MouseMotionListene
 			JOptionPane.QUESTION_MESSAGE,null,opciones,"Aceptar");
 			if (eleccion == JOptionPane.YES_OPTION){
 				game = SaveGameXML.readGameSaved();
-				jfMainWindow = new JFMainWindow(game.getListBoss(),game.getHero(),this,game.getHero().getGroupBullet().getListBullets(),game.getAreaGame(),new Boss(500,500, 40));
+				jfMainWindow = new JFMainWindow(game.getListBoss(),game.getHero(),this,game.getHero().getGroupBullet().getListBullets(),game.getAreaGame(),game.getBoss());
 			}
 		}
 			game.initGame();
