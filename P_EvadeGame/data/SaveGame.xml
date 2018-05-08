@@ -1,34 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Game>
-  <groupBoss>
-    <dataBoss>
-      <posBossX>366</posBossX>
-      <posBossY>132</posBossY>
-      <sizeBoss>50</sizeBoss>
-      <health>40</health>
-    </dataBoss>
-    <dataBoss>
-      <posBossX>367</posBossX>
-      <posBossY>132</posBossY>
-      <sizeBoss>50</sizeBoss>
-      <health>40</health>
-    </dataBoss>
-  </groupBoss>
+  <groupBoss />
   <hero>
-    <posHeroY>245</posHeroY>
-    <posHeroX>485</posHeroX>
+    <posHeroY>345</posHeroY>
+    <posHeroX>795</posHeroX>
     <sizeHero>50</sizeHero>
-    <healthHero>100</healthHero>
+    <healthHero>60</healthHero>
   </hero>
   <timeGame>Hour : 0 Minutes : 0 Second : 14</timeGame>
   <groupBullet />
   <sizeGame>
     <widthGame>600.0</widthGame>
-    <heigthGame>600.0</heigthGame>
+    <heigthGame>900.0</heigthGame>
   </sizeGame>
   <boss>
-    <posBossX>500</posBossX>
-    <posBossY>500</posBossY>
+    <posBossX>797</posBossX>
+    <posBossY>233</posBossY>
     <sizeBoss>40</sizeBoss>
     <healthBoss>200</healthBoss>
   </boss>

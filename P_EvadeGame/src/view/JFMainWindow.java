@@ -16,7 +16,7 @@ import models.Hero;
 public class JFMainWindow extends JFrame{
 	private static final String NAME_APP = "RASTREADOR";
 	private static final long serialVersionUID = 1L;
-	private JPCronometer jpCronometer;
+	private JPStats jpStats;
 	private JPGameZone jpGameZone;
 	private ImageIcon icon = new ImageIcon(getClass().getResource("/icon.jpg"));
 	
@@ -27,25 +27,23 @@ public class JFMainWindow extends JFrame{
 		this.setIconImage(icon.getImage());
 		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		jpCronometer = new JPCronometer();
+		jpStats = new JPStats(player);
 		jpGameZone = new JPGameZone(listEnemys,player,listBullets,controller,boss);
-		
-		
 		this.setVisible(true);
 		init();
 	}
 
 	private void init() {
-		this.add(jpCronometer,BorderLayout.SOUTH);
+		this.add(jpStats,BorderLayout.SOUTH);
 		this.add(jpGameZone, BorderLayout.CENTER);
 	}
 	
 	public void setTimeJLabel(String string){
-		jpCronometer.setTimeJLabel(string);
+		jpStats.setTimeJLabel(string);
 	}
 	
 	public String getTimeJLabel(){
-		return jpCronometer.getTimeJLabel();
+		return jpStats.getTimeJLabel();
 	}
 	
 }

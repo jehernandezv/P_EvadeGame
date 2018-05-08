@@ -1,6 +1,7 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 
 public class MyThread implements Runnable{
@@ -25,13 +26,20 @@ public class MyThread implements Runnable{
 	public void run() {
 		while (!stop) {
 			try {
-				for (int index = 0; index < getlistEnemy().size(); index++) {
-					getlistEnemy().get(index).chase(hero.x, hero.y);
-					if(getlistEnemy().get(index).intersects(this.hero)){
+				for (Iterator<?> it = listEnemys.iterator(); it.hasNext();) {
+					Enemy enemy = (Enemy) it.next();
+					enemy.chase(hero.x, hero.y);
+					if(enemy.intersects(this.hero)){
+						it.remove();
+						hero.decreaseHealth();
 					}
 				}
 				if(listEnemys.size() == 0){
-					boss.chase(hero.x, hero.y);
+					if(hero.intersects(boss.x, boss.y, boss.height, boss.width)){
+						this.stop = true;
+					}else{
+						boss.chase(hero.x, hero.y);
+						}
 				}
 				Thread.sleep(sleep);
 			} catch (InterruptedException e) {

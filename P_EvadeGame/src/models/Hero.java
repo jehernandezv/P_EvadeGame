@@ -14,7 +14,11 @@ public class Hero extends Rectangle{
 		super(x,y,size,size);
 		groupBullet = new GroupBullet();
 	}
-
+	
+	
+	public void decreaseHealth(){
+		this.health -= 20;
+	}
 	public void moveLeft(){
 		x -= step ;
 	}

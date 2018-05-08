@@ -13,7 +13,7 @@ public class Game{
 	private Hero hero;
 	private MyThread moveFigures;
 	private Timer timerCronometer;
-	private Timer bullet;
+	private Timer timerBullet;
 	private String cronometer;
 	private LocalDateTime cronometerGame;
 	private Rectangle areaGame;
@@ -61,7 +61,7 @@ public class Game{
 	}
 	
 	public void bulletUpdate(){
-		this.bullet = new Timer(10, new ActionListener() {
+		this.timerBullet = new Timer(10, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//Recorre el grupo de enemigos
 					for (Iterator<?> it = groupBoss.getBosses().iterator(); it.hasNext();) {
@@ -107,7 +107,7 @@ public class Game{
 					
 					}
 				});
-				bullet.start();
+				timerBullet.start();
 	}
 
 	public ArrayList<Enemy> getListBoss(){

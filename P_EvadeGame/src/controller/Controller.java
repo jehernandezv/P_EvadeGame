@@ -43,7 +43,7 @@ public class Controller implements KeyListener, MouseListener,MouseMotionListene
 	
 	public void initGame(){
 		File file = new File("data/SaveGame.xml");
-		game = new Game(new GroupBoss(2),(new Hero(40, 60,50)),new Rectangle(600,600),new Boss(500,500, 40));
+		game = new Game(new GroupBoss(2),(new Hero(40, 60,50)),new Rectangle(600,900),new Boss(500,500, 40));
 		jfMainWindow = new JFMainWindow(game.getListBoss(),game.getHero(),this,game.getHero().getGroupBullet().getListBullets(),game.getAreaGame(),game.getBoss());
 		if(file.exists()){
 			Object [] opciones ={"Aceptar","Cancelar"};
@@ -55,8 +55,8 @@ public class Controller implements KeyListener, MouseListener,MouseMotionListene
 				jfMainWindow = new JFMainWindow(game.getListBoss(),game.getHero(),this,game.getHero().getGroupBullet().getListBullets(),game.getAreaGame(),game.getBoss());
 			}
 		}
-			game.initGame();
 			this.autoSave(game);
+			game.initGame();
 			this.refreshJFMainWindow();
 			
 		
