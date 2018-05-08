@@ -1,47 +1,11 @@
 package models;
 
-import java.awt.Rectangle;
-public class Boss extends Rectangle{
+public class Boss extends Enemy{
 	private static final long serialVersionUID = 1L;
-	private int step = 2;
-	
-	public Boss(int x,int y,int size) {
-		super(x,y,size,size);
-	}
 
-	public void chase(int xHero, int yHero){
-		if(x >= xHero){
-			this.moveLeft();
-		}
-		if(x <= xHero){
-			this.moveRigth();
-		}
-		if(y > yHero){
-			this.moveUP();
-		}
-		if(y < yHero){
-			this.moveDown();
-		}
+	public Boss(int x, int y, int size) {
+		super(x, y, size);
+		this.setHealth((short) 200);
+		this.setStep(3);
 	}
-	
-	public boolean isColision(int x,int y){
-		return this.contains(x, y);
-	}
-	
-	public void moveLeft(){
-		x -=step ;
-	}
-	
-	public void moveRigth(){
-		x += step ;
-	}
-	
-	public void moveUP(){
-		y -= step;
-	}
-	
-	public void moveDown(){
-		y += step ;
-	}
-
 }

@@ -9,13 +9,15 @@ public class MyThread implements Runnable{
 	private int sleep;
 	private boolean stop;
 	private boolean pause;
-	private ArrayList<Boss> listBoss;
+	private ArrayList<Enemy> listEnemys;
+	private Boss boss;
 	private Hero hero;
 	
-	public MyThread(int sleep,ArrayList<Boss> listBoss,Hero hero) {
+	public MyThread(int sleep,ArrayList<Enemy> listBoss,Hero hero,Boss boss) {
 		this.hero = hero;
-		this.listBoss = listBoss;
+		this.listEnemys = listBoss;
 		this.sleep = sleep;
+		this.boss = boss;
 		thread = new Thread(this);
 	}
 	
@@ -23,12 +25,14 @@ public class MyThread implements Runnable{
 	public void run() {
 		while (!stop) {
 			try {
-				for (int index = 0; index < getListBoss().size(); index++) {
-					getListBoss().get(index).chase(hero.x, hero.y);
-					if(getListBoss().get(index).intersects(this.hero)){
-						//this.stop();
+				for (int index = 0; index < getlistEnemy().size(); index++) {
+					getlistEnemy().get(index).chase(hero.x, hero.y);
+					if(getlistEnemy().get(index).intersects(this.hero)){
 					}
-				}	
+				}
+				if(listEnemys.size() == 0){
+					boss.chase(hero.x, hero.y);
+				}
 				Thread.sleep(sleep);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -72,18 +76,25 @@ public class MyThread implements Runnable{
 		return thread;
 	}
 
-	public ArrayList<Boss> getListBoss() {
-		return listBoss;
+	public ArrayList<Enemy> getlistEnemy() {
+		return listEnemys;
 	}
 
-	public void setListBoss(ArrayList<Boss> listBoss) {
-		this.listBoss = listBoss;
+	public void setListBoss(ArrayList<Enemy> listBoss) {
+		this.listEnemys = listBoss;
 	}
 
 	public boolean isStop() {
 		return stop;
 	}
-	
+
+	public Boss getBoss() {
+		return boss;
+	}
+
+	public void setBoss(Boss boss) {
+		this.boss = boss;
+	}
 
 //	public static void main(String[] args) {
 //		MyThread t1 = new MyThread("Hola", 3000);

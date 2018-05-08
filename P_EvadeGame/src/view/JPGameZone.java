@@ -8,22 +8,25 @@ import javax.swing.JPanel;
 
 import controller.Controller;
 import models.Boss;
+import models.Enemy;
 import models.Bullet;
 import models.Hero;
 
 public class JPGameZone extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private Hero player;
-	private ArrayList<Boss> bosses;
+	private ArrayList<Enemy> listEnemys;
 	private ArrayList<Bullet> listBullets;
+	private Boss boss;
 	
-	public JPGameZone(ArrayList<Boss> boss,Hero player,ArrayList<Bullet> listBullet,Controller controller) {
+	public JPGameZone(ArrayList<Enemy> boss,Hero player,ArrayList<Bullet> listBullet,Controller controller,Boss bossMaster) {
 		this.addMouseMotionListener(controller);
 		this.addMouseListener(controller);
 		this.setFocusable(true);
 		this.player = player;
-		this.bosses = boss;
+		this.listEnemys = boss;
 		this.listBullets = listBullet;
+		this.boss = bossMaster;
 	}
 	
 	public void paint(Graphics g) {
@@ -32,13 +35,17 @@ public class JPGameZone extends JPanel{
 		g.fillRect(player.x, player.y, player.width, player.height);
 		
 		g.setColor(Color.RED);
-		for (int i = 0; i < bosses.size(); i++) {
-			g.fillRect(bosses.get(i).x , bosses.get(i).y , bosses.get(i).width, bosses.get(i).height);
+		for (int i = 0; i < listEnemys.size(); i++) {
+			g.fillRect(listEnemys.get(i).x , listEnemys.get(i).y , listEnemys.get(i).width, listEnemys.get(i).height);
 		}
 		
 		g.setColor(Color.BLACK);
 		for (int i = 0; i < listBullets.size(); i++) {
 			g.fillRect(listBullets.get(i).x, listBullets.get(i).y, listBullets.get(i).width, listBullets.get(i).height);
+		}
+		if(listEnemys.size() == 0){
+		g.setColor(Color.BLACK);
+		g.fillRect(boss.x, boss.y, boss.width, boss.height);
 		}
 	}
 
@@ -49,4 +56,6 @@ public class JPGameZone extends JPanel{
 	public void setPlayer(Hero player) {
 		this.player = player;
 	}
+	
+	
 }

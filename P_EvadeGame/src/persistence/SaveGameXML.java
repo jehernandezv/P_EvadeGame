@@ -14,7 +14,7 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
-import models.Boss;
+import models.Enemy;
 import models.Bullet;
 import models.Game;
 import models.GroupBoss;
@@ -23,7 +23,7 @@ import models.Hero;
 public class SaveGameXML {
 
 	public static void SaveXmlGroup(Game game){
-		ArrayList<Boss> listBoss = game.getListBoss();
+		ArrayList<Enemy> listEnemy = game.getListBoss();
 		ArrayList<Bullet> listBullets = game.getHero().getGroupBullet().getListBullets();
 		try{
 		File file = new File("data/SaveGame.xml");
@@ -31,7 +31,7 @@ public class SaveGameXML {
 		Document doc = new Document();
 		Element theRoot = new Element("Game");
 		doc.setRootElement(theRoot);
-		Element groupBoss = new Element("groupBoss");
+		Element groupEnemy = new Element("groupBoss");
 		Element groupBullet = new Element("groupBullet");
 		Element sizeGame = new Element("sizeGame");
 		//Tamaño de la pantalla
@@ -60,21 +60,23 @@ public class SaveGameXML {
 		timeGame.addContent(game.getCronometer());
 		
 		//datos de los enemigos
-		for (Boss boss: listBoss) {
+		for (Enemy boss: listEnemy) {
+			Element dataEnemy = new Element("dataBoss");
+			Element posEnemyX = new Element("posBossX");
+			Element posEnemyY = new Element("posBossY");
+			Element sizeEnemy = new Element("sizeBoss");
+			Element health = new Element("health");
 			
-			Element dataBoss = new Element("dataBoss");
-			Element posBossX = new Element("posBossX");
-			Element posBossY = new Element("posBossY");
-			Element sizeBoss = new Element("sizeBoss");
-			
-			posBossX.addContent(String.valueOf(boss.x));
-			posBossY.addContent(String.valueOf(boss.y));
-			sizeBoss.addContent(String.valueOf(boss.height));
+			posEnemyX.addContent(String.valueOf(boss.x));
+			posEnemyY.addContent(String.valueOf(boss.y));
+			sizeEnemy.addContent(String.valueOf(boss.height));
+			health.addContent(String.valueOf(boss.getHealth()));
 				
-			dataBoss.addContent(posBossX);
-			dataBoss.addContent(posBossY);
-			dataBoss.addContent(sizeBoss);
-			groupBoss.addContent(dataBoss);
+			dataEnemy.addContent(posEnemyX);
+			dataEnemy.addContent(posEnemyY);
+			dataEnemy.addContent(sizeEnemy);
+			dataEnemy.addContent(health);
+			groupEnemy.addContent(dataEnemy);
 			}
 		
 		//Balas disparadas
@@ -102,7 +104,7 @@ public class SaveGameXML {
 		
 		
 		//Datos al padre del XML
-		theRoot.addContent(groupBoss);
+		theRoot.addContent(groupEnemy);
 		theRoot.addContent(hero);
 		theRoot.addContent(timeGame);
 		theRoot.addContent(groupBullet);
@@ -126,12 +128,15 @@ public class SaveGameXML {
 	try {
 		Document doc = builder.build(file);
 		Element root = doc.getRootElement();
-		ArrayList<Boss> bosses = new ArrayList<Boss>();
+		ArrayList<Enemy> bosses = new ArrayList<Enemy>();
 		for (int i = 0; i < root.getChildren("groupBoss").get(0).getChildren().size(); i++) {
 				int posBossX = Integer.valueOf(root.getChildren("groupBoss").get(0).getChildren().get(i).getChildText("posBossX"));
 				int posBossY = Integer.valueOf(root.getChildren("groupBoss").get(0).getChildren().get(i).getChildText("posBossY"));
 				int sizeBoss = Integer.valueOf(root.getChildren("groupBoss").get(0).getChildren().get(i).getChildText("sizeBoss"));
-				bosses.add(new Boss(posBossX, posBossY, sizeBoss));
+				short health = Short.parseShort(root.getChildren("groupBoss").get(0).getChildren().get(i).getChildText("health"));
+				Enemy boss = new Enemy(posBossX, posBossY, sizeBoss);
+				boss.setHealth(health);
+				bosses.add(boss);
 		}
 		groupBoss.setBosses(bosses);
 		//Disparos
@@ -149,7 +154,7 @@ public class SaveGameXML {
 		int posHeroX = Integer.parseInt(root.getChildren("hero").get(0).getChildText("posHeroX"));
 		int posHeroY = Integer.parseInt(root.getChildren("hero").get(0).getChildText("posHeroY"));
 		int sizeHero = Integer.parseInt(root.getChildren("hero").get(0).getChildText("sizeHero"));
-		game = new Game(groupBoss, new Hero(posHeroX, posHeroY, sizeHero),null);
+		game = new Game(groupBoss, new Hero(posHeroX, posHeroY, sizeHero),null,null);
 		game.getHero().getGroupBullet().setListBullets(listBullets);
 		String [] values = root.getChildText("timeGame").split(":");
 		byte second = Byte.parseByte(getValue(values[3]));
@@ -160,7 +165,7 @@ public class SaveGameXML {
 		//Tamaño del juego
 		double heigth = Double.parseDouble(root.getChildren("sizeGame").get(0).getChildText("heigthGame"));
 		double width = Double.parseDouble(root.getChildren("sizeGame").get(0).getChildText("widthGame"));
-		game.setAreaGame(new Rectangle((int)heigth,(int)width));	
+		game.setAreaGame(new Rectangle((int)width,(int)heigth));	
 		
 	} catch (JDOMException | IOException e) {
 		

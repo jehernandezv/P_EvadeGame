@@ -8,11 +8,12 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.File;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import persistence.SaveGameXML;
-import utility.Utility;
 import view.JFMainWindow;
+import models.Boss;
 import models.Bullet;
 import models.Game;
 import models.GroupBoss;
@@ -24,21 +25,45 @@ public class Controller implements KeyListener, MouseListener,MouseMotionListene
 	private Timer timerRefresh,timerAutoSave;
 	
 	public Controller() {
-		game = new Game(new GroupBoss(2),(new Hero(40, 60,50)),new Rectangle(800,600));
-		jfMainWindow = new JFMainWindow(game.getListBoss(),game.getHero(),this,game.getHero().getGroupBullet().getListBullets(),game.getAreaGame());
-		game.initGame();
-		this.autoSave(game);
-		this.refreshJFMainWindow();
+		initGame();
 	}
 	
-	public void showStop(){
+	public void showGameOver(){
 		JOptionPane.showMessageDialog(null, "Ha Perdido, Su Tiempo de juego fue de " + game.getCronometer());
 		timerRefresh.stop();
 		game.stop();
 	}
 	
+	public void showWinGame(){
+		JOptionPane.showMessageDialog(null, "Ha Ganado, Su Tiempo de juego fue de " + game.getCronometer());
+		timerRefresh.stop();
+		timerAutoSave.stop();
+		game.stop();
+	}
+	
+	public void initGame(){
+		File file = new File("data/SaveGame.xml");
+		game = new Game(new GroupBoss(2),(new Hero(40, 60,50)),new Rectangle(600,600),new Boss(500,500, 40));
+		jfMainWindow = new JFMainWindow(game.getListBoss(),game.getHero(),this,game.getHero().getGroupBullet().getListBullets(),game.getAreaGame(),game.getBoss());
+		if(file.exists()){
+			Object [] opciones ={"Aceptar","Cancelar"};
+			int eleccion = JOptionPane.showOptionDialog(jfMainWindow,"Se encontro un juego anterior, Desea cargarlo? ","Load?",
+			JOptionPane.YES_NO_OPTION,
+			JOptionPane.QUESTION_MESSAGE,null,opciones,"Aceptar");
+			if (eleccion == JOptionPane.YES_OPTION){
+				game = SaveGameXML.readGameSaved();
+				jfMainWindow = new JFMainWindow(game.getListBoss(),game.getHero(),this,game.getHero().getGroupBullet().getListBullets(),game.getAreaGame(),new Boss(500,500, 40));
+			}
+		}
+			game.initGame();
+			this.autoSave(game);
+			this.refreshJFMainWindow();
+			
+		
+	}
+	
 	public void autoSave(Game game){
-		timerAutoSave = new Timer(5000, new ActionListener() {
+		timerAutoSave = new Timer(15000, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				SaveGameXML.SaveXmlGroup(game);
 				System.out.println("guardo");
@@ -78,7 +103,9 @@ public class Controller implements KeyListener, MouseListener,MouseMotionListene
 			public void actionPerformed(ActionEvent e) {
 				jfMainWindow.setTimeJLabel(game.getCronometer());
 				if(game.getMoveFigures().isStop()){
-					showStop();
+					showGameOver();
+				}else if(!game.getTimerCronometer().isRunning()){
+					showWinGame();
 				}
 				jfMainWindow.repaint();
 			}
@@ -87,7 +114,6 @@ public class Controller implements KeyListener, MouseListener,MouseMotionListene
 	}
 	
 	public void mouseClicked(MouseEvent e) {
-		System.out.println("Grados: " + ( 360 - Utility.atPolar(e.getX(), e.getY())));
 		game.getHero().getGroupBullet().getListBullets().add(new Bullet(0, (short) 10, game.getHero().x,game.getHero().y));
 	}
 
@@ -112,7 +138,7 @@ public class Controller implements KeyListener, MouseListener,MouseMotionListene
 	}
 
 	public void mouseMoved(MouseEvent e) {
-		System.out.println("X: " + (e.getX()- game.getHero().x) + " Y: " +  (e.getY() - game.getHero().y));
+		//System.out.println("X: " + (e.getX()- game.getHero().x) + " Y: " +  (e.getY() - game.getHero().y));
 	}
 
 	

@@ -1,7 +1,6 @@
 package models;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class GroupBullet {
 	private ArrayList<Bullet> listBullets;
@@ -18,13 +17,4 @@ public class GroupBullet {
 		this.listBullets = listBullets;
 	}
 	
-	
-	public void removeBulletValidate(int x,int y){
-		for (Iterator<?> it = listBullets.iterator(); it.hasNext();) {
-			Bullet bullet = (Bullet) it.next();
-			if(bullet.x > x || bullet.y > y){
-				it.remove();
-			}
-	}
-  }
 }

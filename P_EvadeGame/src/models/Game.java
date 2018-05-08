@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
-
 import javax.swing.Timer;
 
 public class Game{
@@ -18,12 +17,14 @@ public class Game{
 	private String cronometer;
 	private LocalDateTime cronometerGame;
 	private Rectangle areaGame;
+	private Boss boss;
 	
-	public Game(GroupBoss groupBoss, Hero hero,Rectangle areaGame) {
+	public Game(GroupBoss groupBoss, Hero hero,Rectangle areaGame,Boss boss) {
 		this.groupBoss = groupBoss;
 		this.hero = hero;
 		this.areaGame = areaGame;
-		moveFigures = new MyThread(30,groupBoss.getBosses(),hero);
+		this.boss = boss;
+		moveFigures = new MyThread(30,groupBoss.getBosses(),hero,boss);
 	}
 	
 	public void stop(){
@@ -34,10 +35,8 @@ public class Game{
 	public void initGame(){
 		moveFigures.start();
 		cromometer();
-		initBullet();
+		bulletUpdate();
 	}
-	
-	
 	
 	public void cromometer(){
 		timerCronometer = new Timer(1000, new ActionListener() {
@@ -61,29 +60,57 @@ public class Game{
 		timerCronometer.start();
 	}
 	
-	public void initBullet(){
+	public void bulletUpdate(){
 		this.bullet = new Timer(10, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(hero.getGroupBullet().getListBullets().size() != 0){
-					for (Iterator<?> it = hero.getGroupBullet().getListBullets().iterator(); it.hasNext();) {
-						Bullet bullet = (Bullet) it.next();
-						try {
-							if(bullet.x -50 > areaGame.width || bullet.y -50 > areaGame.getHeight()){
-								it.remove();
-							}else{
-								bullet.move(5);
+				//Recorre el grupo de enemigos
+					for (Iterator<?> it = groupBoss.getBosses().iterator(); it.hasNext();) {
+						Enemy enemy = (Enemy) it.next();
+						//Recorre el grupo de disparos del heroe
+					for (Iterator<?> it2 = hero.getGroupBullet().getListBullets().iterator(); it2.hasNext();) {
+						Bullet bullet = (Bullet) it2.next();
+							if(enemy.intersects(bullet.x, bullet.y, bullet.height, bullet.width)){
+								it2.remove();
+								if(enemy.getHealth() - bullet.getDamage() == 0){
+									it.remove();
+								}else{
+									enemy.decreaseHealth(bullet.getDamage());
+								}
 							}
-						} catch (InterruptedException e1) {
-							e1.printStackTrace();
-						}						
+							
+							
+						}
 					}
-				}
-			}
-		});
-		bullet.start();
+					for (Iterator<?> it3 = hero.getGroupBullet().getListBullets().iterator(); it3.hasNext();) {
+						Bullet bullet = (Bullet) it3.next();
+							if(bullet.x + 5 > areaGame.height || bullet.y + 5 > areaGame.width){
+								it3.remove();
+							}else{
+								//Evaluar daño al boss master
+								if(boss.intersects(bullet.x, bullet.y, bullet.height, bullet.width)){
+									it3.remove();
+									if(boss.getHealth() - bullet.getDamage() == 0){
+										timerCronometer.stop();;
+									}else{
+										boss.decreaseHealth(bullet.getDamage());
+									}
+								}
+									
+								//Mover disparos
+								try {
+									bullet.move(5);
+								} catch (InterruptedException e1) {
+									e1.printStackTrace();
+								}
+							}
+						}
+					
+					}
+				});
+				bullet.start();
 	}
 
-	public ArrayList<Boss> getListBoss(){
+	public ArrayList<Enemy> getListBoss(){
 		return this.groupBoss.getBosses();
 	}
 	
@@ -124,7 +151,15 @@ public class Game{
 	public void setAreaGame(Rectangle areaGame) {
 		this.areaGame = areaGame;
 	}
+
+	public Boss getBoss() {
+		return boss;
+	}
+
+	public void setBoss(Boss boss) {
+		this.boss = boss;
+	}
 	
 	
-	
+
 }

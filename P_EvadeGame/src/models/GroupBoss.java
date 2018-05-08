@@ -4,24 +4,24 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class GroupBoss {
-	ArrayList<Boss> bosses;
+	ArrayList<Enemy> bosses;
 
 	public GroupBoss(int cant) {
-		bosses = new ArrayList<Boss>();
+		bosses = new ArrayList<Enemy>();
 		generateBoss(cant);
 	}
 	
 	public GroupBoss(){
-		bosses = new ArrayList<Boss>();
+		bosses = new ArrayList<Enemy>();
 	}
 	
 	public void generateBoss(int cant){
 		Random random = new Random();
 		for (int i = 0; i < cant; i++) {
 			if(bosses.size() == 0){
-				bosses.add(new Boss(random.nextInt(800), random.nextInt(800), 50));
+				bosses.add(new Enemy(random.nextInt(800), random.nextInt(800), 50));
 			}else {
-				Boss boss = new Boss(random.nextInt(800), random.nextInt(800), 50);
+				Enemy boss = new Enemy(random.nextInt(800), random.nextInt(800), 50);
 				if(!validatePositionBoss(boss)){
 				    bosses.add(boss);
 				}
@@ -29,7 +29,7 @@ public class GroupBoss {
 		}
 	}
 	
-	public boolean validatePositionBoss(Boss boss){
+	public boolean validatePositionBoss(Enemy boss){
 		boolean flag = false;
 		for (int i = 0; i < this.getBosses().size(); i++) {
 			if(getBosses().get(i).contains(boss.x, boss.y)){
@@ -39,11 +39,11 @@ public class GroupBoss {
 		return flag;
 	}
 
-	public ArrayList<Boss> getBosses() {
+	public ArrayList<Enemy> getBosses() {
 		return bosses;
 	}
 
-	public void setBosses(ArrayList<Boss> bosses) {
+	public void setBosses(ArrayList<Enemy> bosses) {
 		this.bosses = bosses;
 	}
 }

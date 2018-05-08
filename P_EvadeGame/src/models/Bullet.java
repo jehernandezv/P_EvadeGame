@@ -5,6 +5,7 @@ import com.sun.javafx.geom.Rectangle;
 public class Bullet extends Rectangle{
 	private double direction;
 	private short size;
+	private short damage = 20;
 	
 	public Bullet(double direction, short size,int x,int y) {
 		super(x,y,size,size);
@@ -37,5 +38,15 @@ public class Bullet extends Rectangle{
 	public void setSize(short size) {
 		this.size = size;
 	}
+
+	public short getDamage() {
+		return damage;
+	}
+
+	public void setDamage(short damage) {
+		this.damage = damage;
+	}
+	
+	
 	
 }
