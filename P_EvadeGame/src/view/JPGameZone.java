@@ -2,8 +2,10 @@ package view;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import controller.Controller;
@@ -18,6 +20,9 @@ public class JPGameZone extends JPanel{
 	private ArrayList<Enemy> listEnemys;
 	private ArrayList<Bullet> listBullets;
 	private Boss boss;
+	private ImageIcon hero = new ImageIcon(getClass().getResource("/hero.jpg"));
+	private ImageIcon bossIcon = new ImageIcon(getClass().getResource("/boss.png"));
+	private ImageIcon bullet = new ImageIcon(getClass().getResource("/bullet.jpg"));
 	
 	public JPGameZone(ArrayList<Enemy> boss,Hero player,ArrayList<Bullet> listBullet,Controller controller,Boss bossMaster) {
 		this.addMouseMotionListener(controller);
@@ -32,21 +37,26 @@ public class JPGameZone extends JPanel{
 	
 	public void paint(Graphics g) {
 		super.paint(g);
-		g.setColor(Color.decode("#91DC5A"));
-		g.fillRect(player.x, player.y, player.width, player.height);
-		
+		ImageIcon imageNew;
+		this.setBackground(Color.decode("#5D92FF"));
+		Image imageAux;
+		imageAux = hero.getImage();
+		imageNew = new ImageIcon(imageAux.getScaledInstance(player.height, player.width,Image.SCALE_REPLICATE));
+		g.drawImage(imageNew.getImage(), player.x, player.y, null);
 		g.setColor(Color.RED);
 		for (int i = 0; i < listEnemys.size(); i++) {
 			g.fillRect(listEnemys.get(i).x , listEnemys.get(i).y , listEnemys.get(i).width, listEnemys.get(i).height);
 		}
 		
-		g.setColor(Color.BLACK);
+		imageAux = bullet.getImage();
 		for (int i = 0; i < listBullets.size(); i++) {
-			g.fillRect(listBullets.get(i).x, listBullets.get(i).y, listBullets.get(i).width, listBullets.get(i).height);
+			imageNew = new ImageIcon(imageAux.getScaledInstance(listBullets.get(i).height, listBullets.get(i).width,Image.SCALE_REPLICATE));
+			g.drawImage(imageNew.getImage(),listBullets.get(i).x, listBullets.get(i).y, null);
 		}
 		if(listEnemys.size() == 0){
-		g.setColor(Color.BLACK);
-		g.fillRect(boss.x, boss.y, boss.width, boss.height);
+		imageAux = bossIcon.getImage();	
+		imageNew = new ImageIcon(imageAux.getScaledInstance(boss.height, boss.width,Image.SCALE_REPLICATE));
+		g.drawImage(imageNew.getImage(), boss.x, boss.y, null);
 		}
 	}
 

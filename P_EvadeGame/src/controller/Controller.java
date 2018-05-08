@@ -9,8 +9,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.File;
+
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
+
 import persistence.SaveGameXML;
 import view.JFMainWindow;
 import models.Boss;
@@ -43,30 +45,39 @@ public class Controller implements KeyListener, MouseListener,MouseMotionListene
 	
 	public void initGame(){
 		File file = new File("data/SaveGame.xml");
-		game = new Game(new GroupBoss(2),(new Hero(40, 60,50)),new Rectangle(600,900),new Boss(500,500, 40));
-		jfMainWindow = new JFMainWindow(game.getListBoss(),game.getHero(),this,game.getHero().getGroupBullet().getListBullets(),game.getAreaGame(),game.getBoss());
-		if(file.exists()){
-			Object [] opciones ={"Aceptar","Cancelar"};
-			int eleccion = JOptionPane.showOptionDialog(jfMainWindow,"Se encontro un juego anterior, Desea cargarlo? ","Load?",
-			JOptionPane.YES_NO_OPTION,
-			JOptionPane.QUESTION_MESSAGE,null,opciones,"Aceptar");
-			if (eleccion == JOptionPane.YES_OPTION){
-				game = SaveGameXML.readGameSaved();
-				jfMainWindow = new JFMainWindow(game.getListBoss(),game.getHero(),this,game.getHero().getGroupBullet().getListBullets(),game.getAreaGame(),game.getBoss());
+		try {
+			game = new Game(new GroupBoss(5),(new Hero(40, 60,50)),new Rectangle(600,900),new Boss(500,500, 40));
+			game.setTimeSave(Short.parseShort(JOptionPane.showInputDialog("Por favor ingrese cada cuando tiempo en segundos desea que se guarde el juego", null)));
+			jfMainWindow = new JFMainWindow(game.getListBoss(),game.getHero(),this,game.getHero().getGroupBullet().getListBullets(),game.getAreaGame(),game.getBoss());
+			if(file.exists()){
+				Object [] opciones ={"Aceptar","Cancelar"};
+				int eleccion = JOptionPane.showOptionDialog(jfMainWindow,"Se encontro un juego anterior, Desea cargarlo? ","Load?",
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE,null,opciones,"Aceptar");
+				if (eleccion == JOptionPane.YES_OPTION){
+					game = SaveGameXML.readGameSaved();
+					jfMainWindow = new JFMainWindow(game.getListBoss(),game.getHero(),this,game.getHero().getGroupBullet().getListBullets(),game.getAreaGame(),game.getBoss());
+				}
 			}
-		}
-			this.autoSave(game);
+			this.autoSave(game,game.getTimeSave());
 			game.initGame();
 			this.refreshJFMainWindow();
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(null, "El tiempo debe ser un numero entero positivo");
+			try {
+				this.getClass().newInstance();
+			} catch (InstantiationException | IllegalAccessException e1) {
+				e1.printStackTrace();
+			}
+		}
 			
 		
 	}
 	
-	public void autoSave(Game game){
-		timerAutoSave = new Timer(15000, new ActionListener() {
+	public void autoSave(Game game,short timeSave){
+		timerAutoSave = new Timer(timeSave * 1000, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				SaveGameXML.SaveXmlGroup(game);
-				System.out.println("guardo");
 			}
 		});
 		timerAutoSave.start();
@@ -99,7 +110,7 @@ public class Controller implements KeyListener, MouseListener,MouseMotionListene
 	}
 	
 	public void refreshJFMainWindow(){
-		timerRefresh = new Timer(5, new ActionListener(){
+		timerRefresh = new Timer(10, new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				jfMainWindow.setTimeJLabel(game.getCronometer());
 				if(game.getMoveFigures().isStop()){
@@ -114,9 +125,17 @@ public class Controller implements KeyListener, MouseListener,MouseMotionListene
 	}
 	
 	public void mouseClicked(MouseEvent e) {
-		game.getHero().getGroupBullet().getListBullets().add(new Bullet(0, (short) 10, game.getHero().x,game.getHero().y));
+		game.getHero().getGroupBullet().getListBullets().add(new Bullet(0, (short) 10, game.getHero().x + game.getHero().width,game.getHero().y + (game.getHero().height / 2)));
 	}
 
+	public void actionPerformed(ActionEvent e) {
+		switch (EAction.valueOf(e.getActionCommand())) {
+		case EXITGAME:
+			SaveGameXML.SaveXmlGroup(game);
+			break;
+		}
+	}
+	
 	public void mousePressed(MouseEvent e) {
 	}
 
@@ -138,17 +157,9 @@ public class Controller implements KeyListener, MouseListener,MouseMotionListene
 	}
 
 	public void mouseMoved(MouseEvent e) {
-		//System.out.println("X: " + (e.getX()- game.getHero().x) + " Y: " +  (e.getY() - game.getHero().y));
 	}
 
 	
 	
-	public void actionPerformed(ActionEvent e) {
-		switch (EAction.valueOf(e.getActionCommand())) {
-		case EXITGAME:
-			SaveGameXML.SaveXmlGroup(game);
-			break;
-		}
-	}
 
 }

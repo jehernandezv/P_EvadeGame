@@ -36,6 +36,9 @@ public class SaveGameXML {
 		Element groupBullet = new Element("groupBullet");
 		Element sizeGame = new Element("sizeGame");
 		Element boss = new Element("boss");
+		//Tiempo de guardado
+		Element timeSave = new Element("timeSave");
+		timeSave.addContent(String.valueOf(game.getTimeSave()));
 		//Datos del boss
 		Element posBossX = new Element("posBossX");
 		Element posBossY = new Element("posBossY");
@@ -75,6 +78,7 @@ public class SaveGameXML {
 		hero.addContent(posHeroX);
 		hero.addContent(sizeHero);
 		hero.addContent(healthHero);
+		
 		
 		//tiempo de juego
 		Element timeGame = new Element("timeGame");
@@ -131,6 +135,7 @@ public class SaveGameXML {
 		theRoot.addContent(groupBullet);
 		theRoot.addContent(sizeGame);
 		theRoot.addContent(boss);
+		theRoot.addContent(timeSave);
 		
 		XMLOutputter xmlOutput = new XMLOutputter(Format.getPrettyFormat());
 		xmlOutput.output(doc, fileOutputStream);
@@ -199,6 +204,9 @@ public class SaveGameXML {
 		double heigth = Double.parseDouble(root.getChildren("sizeGame").get(0).getChildText("heigthGame"));
 		double width = Double.parseDouble(root.getChildren("sizeGame").get(0).getChildText("widthGame"));
 		game.setAreaGame(new Rectangle((int)width,(int)heigth));	
+		//Cargar tiempo de guardado
+		short timeSave = Short.valueOf(root.getChildText("timeSave"));
+		game.setTimeSave(timeSave);
 		
 	} catch (JDOMException | IOException e) {
 		

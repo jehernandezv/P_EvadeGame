@@ -18,13 +18,14 @@ public class Game{
 	private LocalDateTime cronometerGame;
 	private Rectangle areaGame;
 	private Boss boss;
+	private short timeSave;
 	
 	public Game(GroupBoss groupBoss, Hero hero,Rectangle areaGame,Boss boss) {
 		this.groupBoss = groupBoss;
 		this.hero = hero;
 		this.areaGame = areaGame;
 		this.boss = boss;
-		moveFigures = new MyThread(30,groupBoss.getBosses(),hero,boss);
+		moveFigures = new MyThread(50,groupBoss.getBosses(),hero,boss);
 	}
 	
 	public void stop(){
@@ -159,6 +160,16 @@ public class Game{
 	public void setBoss(Boss boss) {
 		this.boss = boss;
 	}
+
+	public short getTimeSave() {
+		return timeSave;
+	}
+
+	public void setTimeSave(short timeSave) {
+		this.timeSave = timeSave;
+	}
+	
+	
 	
 	
 

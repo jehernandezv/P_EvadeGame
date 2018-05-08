@@ -33,6 +33,9 @@ public class MyThread implements Runnable{
 						it.remove();
 						hero.decreaseHealth();
 					}
+					if(hero.getHealth() == 0){
+						this.stop = true;
+					}
 				}
 				if(listEnemys.size() == 0){
 					if(hero.intersects(boss.x, boss.y, boss.height, boss.width)){
