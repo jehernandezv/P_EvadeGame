@@ -7,6 +7,7 @@ public class Hero extends Rectangle{
 	private static final long serialVersionUID = 1L;
 	private int step = 5;
 	private GroupBullet groupBullet;
+	private short health = 100;
 
 
 	public Hero(int x, int y ,int size) {
@@ -36,8 +37,14 @@ public class Hero extends Rectangle{
 
 	public void setGroupBullet(GroupBullet groupBullet) {
 		this.groupBullet = groupBullet;
+	}
+
+	public short getHealth() {
+		return health;
+	}
+
+	public void setHealth(short health) {
+		this.health = health;
 	}	
-	
-	
 
 }

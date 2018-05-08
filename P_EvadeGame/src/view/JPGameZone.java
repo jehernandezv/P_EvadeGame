@@ -22,6 +22,7 @@ public class JPGameZone extends JPanel{
 	public JPGameZone(ArrayList<Enemy> boss,Hero player,ArrayList<Bullet> listBullet,Controller controller,Boss bossMaster) {
 		this.addMouseMotionListener(controller);
 		this.addMouseListener(controller);
+		this.addKeyListener(controller);
 		this.setFocusable(true);
 		this.player = player;
 		this.listEnemys = boss;

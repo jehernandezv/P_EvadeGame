@@ -64,14 +64,17 @@ public class SaveGameXML {
 		Element posHeroX = new Element("posHeroX");
 		Element posHeroY = new Element("posHeroY");
 		Element sizeHero = new Element("sizeHero");
+		Element healthHero = new Element("healthHero");
 		
 		posHeroX.addContent(String.valueOf(game.getHero().x));
 		posHeroY.addContent(String.valueOf(game.getHero().y));
 		sizeHero.addContent(String.valueOf(game.getHero().height));
+		healthHero.addContent(String.valueOf(game.getHero().getHealth()));
 		
 		hero.addContent(posHeroY);
 		hero.addContent(posHeroX);
 		hero.addContent(sizeHero);
+		hero.addContent(healthHero);
 		
 		//tiempo de juego
 		Element timeGame = new Element("timeGame");
@@ -181,10 +184,13 @@ public class SaveGameXML {
 		int posHeroX = Integer.parseInt(root.getChildren("hero").get(0).getChildText("posHeroX"));
 		int posHeroY = Integer.parseInt(root.getChildren("hero").get(0).getChildText("posHeroY"));
 		int sizeHero = Integer.parseInt(root.getChildren("hero").get(0).getChildText("sizeHero"));
-		game = new Game(groupBoss, new Hero(posHeroX, posHeroY, sizeHero),null,boss);
+		short helthHero = Short.valueOf(root.getChildren("hero").get(0).getChildText("healthHero"));
+		Hero hero = new Hero(posHeroX, posHeroY, sizeHero);
+		hero.setHealth(helthHero);
+		game = new Game(groupBoss, hero,null,boss);
 		game.getHero().getGroupBullet().setListBullets(listBullets);
 		String [] values = root.getChildText("timeGame").split(":");
-		byte second = Byte.parseByte(getValue(values[3]));
+		int second = Integer.parseInt(values[3].trim());
 		byte minutes = Byte.parseByte(getValue(values[2]));
 		byte hour = Byte.parseByte(getValue(values[1]));
 		LocalDateTime dateTime = LocalDateTime.of(1, 1, 1, hour, minutes, second);

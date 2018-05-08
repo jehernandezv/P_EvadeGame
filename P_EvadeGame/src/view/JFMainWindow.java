@@ -29,7 +29,7 @@ public class JFMainWindow extends JFrame{
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		jpCronometer = new JPCronometer();
 		jpGameZone = new JPGameZone(listEnemys,player,listBullets,controller,boss);
-		this.addKeyListener(controller);
+		
 		
 		this.setVisible(true);
 		init();
